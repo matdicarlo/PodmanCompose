@@ -20,12 +20,11 @@ public class ProxyRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-
-// Solution 1, setting Global Options for proxy works, but setting nonProxyHost is not working
+// Solution 1, setting Global Options for proxy works. However setting nonProxyHost is not working
 /*
             camelContext.getGlobalOptions().put("http.proxyHost", "127.0.0.1");
             camelContext.getGlobalOptions().put("http.proxyPort", "3128");
-//        camelContext.getGlobalOptions().put("http.nonProxyHosts", "postman-echo.com|*.postman-echo.com");
+//        camelContext.getGlobalOptions().put("http.nonProxyHosts", "postman-echo.com|*.postman-echo.com"); //not working
 
         from("timer:nonProxyTest?repeatCount=1")
                 .setHeader("CamelHttpMethod", constant("GET"))
@@ -38,20 +37,31 @@ public class ProxyRoute extends RouteBuilder {
                 .log("Response from httpbin.org: ${body}");
 */
 
-// Solution 2: use a custom configuration class
 
+        // Solution 2: use a custom configuration class
+
+        from("timer:proxyTest?repeatCount=1")
+/*
+                .setHeader("CamelHttpMethod", constant("GET"))
+                //Use the proxy configuration
+                .to("http://httpbin.org")
+                .log("Response from httpbin.org: ${body}")
+*/
+
+                .routeId("ProxyTestRoute")
+                .log("Attempting to connect via proxy 127.0.0.1:3128")
+                .setHeader("CamelHttpMethod", constant("GET"))
+                .to("quarkus-http:httpbin.org")
+                .log("Response from httpbin.org: ${body}");
+
+
+/*
         from("timer:proxyTest?repeatCount=1")
                 .setHeader("CamelHttpMethod", constant("GET"))
                 //Use the non proxy configuration / bypass the proxy
                 .to("httpNonProxy://httpbin.org")
                 .log("Response from httpbin.org: ${body}");
-// bypass the proxy:
-        from("timer:proxyTest?repeatCount=1")
-                .setHeader("CamelHttpMethod", constant("GET"))
-                //Use the proxy configuration
-                .to("http://httpbin.org")
-                .log("Response from httpbin.org: ${body}");
-
+*/
 
 
 

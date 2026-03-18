@@ -1,3 +1,4 @@
+/*
 package Starter;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,10 +27,12 @@ public class HttpProxyConfig {
         component.setHttpClientConfigurer(configurer);
         return component;
     }
-    // This component will use the scheme 'httpNonProxy:' and is unconfigured,
-    // resulting in a direct connection
+
     @Named("httpNonProxy")
     public HttpComponent nonProxyComponent() {
         return new HttpComponent();
     }
+
+
 }
+*/
